@@ -40,7 +40,7 @@ const storage = multer.diskStorage({
  const upload = multer({ storage })
 
 //  Routes
-   app.use('/auth/signUp', signUp)
+   app.use('/auth/signUp', upload.single('picture'), signUp)
   app.use('/auth', userRoutes )
   app.use('/task', taskRoutes )
 //  global errors
