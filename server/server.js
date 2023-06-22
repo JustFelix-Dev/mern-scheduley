@@ -17,9 +17,9 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
+
 // file configuration
 app.use('/assets', express.static(path.join(__dirname , 'public/assets')));
-
 // multer configuration
 const storage = multer.diskStorage({
     destination: function(req,file,cb) {
@@ -31,7 +31,6 @@ const storage = multer.diskStorage({
         cb(null , picturePath)
     }
 })
-
  const upload = multer({ storage })
 
 mongoose.connect(process.env.MONGOURL)
