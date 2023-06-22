@@ -18,14 +18,19 @@ export const signUp = async( req,res,next )=>{
 
 export const logIn = async( req,res,next )=>{
     try{
+
         const { email,password } = req.body;
         const isUser = await taskuser.findOne({email})
-        if(!user) return res.status(404).json('User not found!')
+        if(!isUser) return res.status(404).json('User not found!')
         const isMatched = await bcrypt.compare(password, isUser.password)
         if(!isMatched){
-          return res.status(401).json('Wrong Credentials!')
+          return res.status(401).json('Wrong Credentials!');
         }
-        const token = jwt.sign({id:_id}, process.env.SECRET)
+        const token = jwt.sign({id:isUser._id}, process.env.SECRET)
+        if(isUser){
+          const { password,...userRes} = isUser._doc;
+          return res.status(201).cookie('token',{token},{httpOnly: true}).json({user: userRes })
+        }
 
     }
     catch(err){
