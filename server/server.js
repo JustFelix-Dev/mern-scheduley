@@ -6,12 +6,18 @@ import cors from 'cors';
 import multer from "multer";
 import { fileURLToPath } from 'url';
 import path from "path";
+import taskRoutes from "./routes/taskRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import { signUp } from "./controllers/userController.js";
+
+
 dotenv.config()
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const PORT = process.env.PORT
+
 
 // Middlewares
 app.use(express.json())
@@ -33,7 +39,11 @@ const storage = multer.diskStorage({
 })
  const upload = multer({ storage })
 
-//  general errors
+//  Routes
+   app.use('/auth/signUp', signUp)
+  app.use('/auth', userRoutes )
+  app.use('/task', taskRoutes )
+//  global errors
 app.use((err,req,res,next)=>{
     const status = err.status || 500
     const message = err.message || 'Something went wrong!'
