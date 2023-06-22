@@ -1,4 +1,4 @@
-export const Register = async( req,res,next )=>{
+export const signUp = async( req,res,next )=>{
   try{
 
   }
@@ -7,7 +7,7 @@ export const Register = async( req,res,next )=>{
   }
 }
 
-export const Login = async( req,res,next )=>{
+export const logIn = async( req,res,next )=>{
     try{
   
     }
