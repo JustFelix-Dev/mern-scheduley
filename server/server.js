@@ -17,9 +17,9 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
+app.use('/assets', express.static(path.join(__dirname , 'public/assets')));
 
 // file configuration
-app.use('/assets', express.static(path.join(__dirname , 'public/assets')));
 // multer configuration
 const storage = multer.diskStorage({
     destination: function(req,file,cb) {
