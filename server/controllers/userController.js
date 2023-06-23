@@ -1,6 +1,7 @@
   import bcrypt from 'bcrypt';
   import jwt from 'jsonwebtoken';
   import taskuser from '../models/User.js';
+
 export const signUp = async( req,res,next )=>{
   try{
 
@@ -9,7 +10,6 @@ export const signUp = async( req,res,next )=>{
      const hashed = await bcrypt.hash(password, salt)
      const user = await taskuser.create({name,email,password:hashed,picturePath})
      return res.status(201).json({savedUser : user})
-
   }
   catch(err){
     next(err)
