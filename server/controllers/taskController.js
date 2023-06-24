@@ -6,7 +6,7 @@ export const createTask = async(req,res,next)=>{
        const { id } = req.user;
        const completionDate = new Date(req.body.date)
        const task = await Task.create({...req.body,userId:id, date:completionDate})
-       return res.status(201).json(task);
+       return res.status(201).json({task : task});
    }
    catch(err){
        next(err)
