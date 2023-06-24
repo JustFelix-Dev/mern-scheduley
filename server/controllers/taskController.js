@@ -39,28 +39,28 @@ export const updateTask = async(req,res,next)=>{
 
  export const getTasks = async(req,res,next)=>{
     try{
-        var type = req.query?.type
-        var day = req.type?.day
+        const type = req.query?.type
+        const day = req.type?.day
         const { id } = req.user;
         var maxDay , minDay;
-        if(day === 'Today'){
+        if(day === 'today'){
             minDay = dayjs().format('YYYY-MM-DD')
             maxDay = dayjs().format('YYYY-MM-DD')
         }
-        else if( day === 'Seven'){
+        else if( day === 'seven'){
              minDay = dayjs().subtract(7,'day').format('YYYY-MM-DD')
              maxDay = dayjs().format('YYYY-MM-DD')
         }
-        else if( day === 'Thirty'){
+        else if( day === 'thirty'){
             minDay = dayjs().subtract(30,'day').format('YYYY-MM-DD')
             maxDay = dayjs().format('YYYY-MM-DD')
         }
 
         if(type){
-            var tasks = await Task.find({userId: id, type , ...(day && {date: {$lte: new Date(max), $gte: new Date(min)}})})
+            var tasks = await Task.find({userId: id, type , ...(day && {date: {$lte: new Date(maxDay), $gte: new Date(minDay)}})})
         }
         else{
-            var tasks = await Task.find({userId: id , ...(day && {date: {$lte: new Date(max), $gte: new Date(min)}})})
+            var tasks = await Task.find({userId: id , ...(day && {date: {$lte: new Date(maxDay), $gte: new Date(minDay)}})})
         }
         return res.status(201).json({tasks})
     }

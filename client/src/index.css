@@ -10,3 +10,8 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .task__container{
+    display: flex;
+    gap: 0.8rem;
+  }
