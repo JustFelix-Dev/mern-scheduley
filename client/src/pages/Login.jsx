@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import Dropzone  from "react-dropzone";
 import axios from '../services/api';
+import { setLogin } from '../features/user/userSlice';
 
 
 
@@ -41,11 +42,26 @@ const Login = () => {
         const navigate = useNavigate();
 
         const handleLogin =(values,onSubmitProps)=>{
-             axios.post('/auth/login')
+             axios.post('/auth/login', values)
+             .then((res)=>{
+                onSubmitProps.resetForm()
+                dispatch(setLogin(res.data.user))
+                navigate('/home')
+             })
         }
         
         const handleSignUp=(values,onSubmitProps)=>{
-          
+            let formData = new FormData()
+            for(const property of Object.keys(values)){
+                formData.append(property, values[property])
+            }
+            axios.post('/auth/signup',formData)
+            .then((res)=>{
+                onSubmitProps.resetForm()
+                setPage('login')
+            })
+        
+            //  axios.post('/auth/signup',)
         }
         
         const handleForm = (values,onSubmitProps)=>{
@@ -67,7 +83,7 @@ const Login = () => {
                    resetForm,
                    values,
                    handleChange,
-                   errors,}
+                   errors}
 
                )=>(
                    <div className="form__wrapper">
@@ -79,7 +95,16 @@ const Login = () => {
                                     isSignUp && (
                                         <>
                                         <label htmlFor='name'>Name:</label><br/>
-                                        <input type='text' name='name' value={values.name} onChange={handleChange} onBlur={handleBlur} error={Boolean(touched.name) && Boolean(errors.name)} helpertext={touched.name && errors.name}/> <br />
+                                        <input type='text' name='name'
+                                         value={values.name} 
+                                         onChange={handleChange}
+                                         onBlur={handleBlur} 
+                                         error={ touched.name && errors.name ? errors.name : '' } 
+                                          /> 
+                                          {touched.name && errors.name && (
+                                                <div className="error-message">{errors.name}</div>
+                                                )}
+                                          <br />
           
                                           <Dropzone multiple={false} acceptedFiles=".jpg, .png"
                                                     onDrop={(acceptedFiles)=>{
@@ -97,9 +122,27 @@ const Login = () => {
                                   }
                             
                               <label htmlFor='email'>Email:</label><br/>
-                              <input type='text' name='email' value={values.email} onChange={handleChange} onBlur={handleBlur} error={Boolean(touched.email)&& Boolean(errors.email)} helpertext={touched.email && errors.email}/> <br />
+                              <input type='text' name='email' 
+                              value={values.email} 
+                              onChange={handleChange} 
+                              onBlur={handleBlur}
+                              error={ touched.email && errors.email ? errors.email : '' } 
+                              /> 
+                              {touched.email && errors.email && (
+                                <div className="error-message">{errors.email}</div>
+                                )}
+                              <br />
+
                             <label htmlFor='password'>Password:</label><br/>
-                              <input type='text' name='password' value={values.password} onChange={handleChange} onBlur={handleBlur} error={Boolean(touched.password)&& Boolean(errors.password)} helpertext={touched.password && errors.password}/>
+                              <input type='text' name='password'
+                               value={values.password} 
+                               onChange={handleChange}
+                                onBlur={handleBlur}
+                                 error={ touched.password && errors.password? errors.password:'' } 
+                                />
+                                 {touched.password && errors.password && (
+                                <div className="error-message">{errors.password}</div>
+                                )}
                               <button type='submit'>{isLogIn ? 'Login' : 'SignUp'}</button>
                               <span onClick={()=>{setPage(isLogIn ? 'signup' : 'login');resetForm()}}>
                                   {
