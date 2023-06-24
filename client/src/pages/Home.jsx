@@ -10,10 +10,9 @@ const Home = () => {
     const dispatch = useDispatch()
     
     useEffect(()=>{
-        axios.get('/task')
-        .then((res)=>{
-            dispatch(setTasks(res.data.tasks))
-        })
+    axios.get('/task').then((res)=>{
+        dispatch(setTasks(res.data.tasks));
+    })
     },[])
     
     const { tasks } = useSelector(( state,action)=> state.task)
@@ -27,7 +26,7 @@ const Home = () => {
     <div className="container">
             {
             tasks.map((task)=>(
-              <Link key={task.id} to={`${task.id}`}>
+              <Link key={task._id} to={`/task/${task._id}`}>
                    <Task task={task}/>
               </Link>  
             ))
