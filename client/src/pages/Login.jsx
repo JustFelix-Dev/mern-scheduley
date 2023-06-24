@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import Dropzone  from "react-dropzone";
+import axios from '../services/api';
 
 
 
@@ -40,18 +41,16 @@ const Login = () => {
         const navigate = useNavigate();
 
         const handleLogin =(values,onSubmitProps)=>{
-            alert('Login')
+             axios.post('/auth/login')
         }
         
         const handleSignUp=(values,onSubmitProps)=>{
-            alert('SignUp')
           
         }
         
         const handleForm = (values,onSubmitProps)=>{
           if(isLogIn) handleLogin(values,onSubmitProps)
           if(isSignUp) handleSignUp(values,onSubmitProps)
-        
         }
         
 
