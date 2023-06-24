@@ -30,9 +30,6 @@ const logInSchema = Yup.object().shape({
     password: Yup.string().required('This is required')
 })
 
-    const handleForm = ()=>{
-
-    }
 
 const Login = () => {
               
@@ -42,11 +39,27 @@ const Login = () => {
         const dispatch = useDispatch();
         const navigate = useNavigate();
 
+        const handleLogin =(values,onSubmitProps)=>{
+            alert('Login')
+        }
+        
+        const handleSignUp=(values,onSubmitProps)=>{
+            alert('SignUp')
+          
+        }
+        
+        const handleForm = (values,onSubmitProps)=>{
+          if(isLogIn) handleLogin(values,onSubmitProps)
+          if(isSignUp) handleSignUp(values,onSubmitProps)
+        
+        }
+        
+
     return ( 
              <Formik
              initialValues={isLogIn ? initialLogInValues : initialSignUpValues}
              validationSchema={ isLogIn ? logInSchema : signUpSchema}
-               onSubmit={handleForm} >
+             onSubmit={handleForm} >
                {(
                    {handleSubmit,
                    handleBlur,
