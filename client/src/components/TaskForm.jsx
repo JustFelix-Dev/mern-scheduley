@@ -53,6 +53,18 @@ const TaskForm = ({ mode='edit',task }) => {
              })=>(
                 <div className="title">
                     <h2>{mode === 'create' ? 'Create a Task' : 'Edit a Task'}</h2>
+                      <form onClick={handleSubmit}>
+                        <label htmlFor="taskName">Task Name:</label>
+                          <input type="text" id='taskName' name='taskName' 
+                          value={values.name}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={ touched.name && errors.name ? errors.name : '' } 
+                           />
+                           {touched.name && errors.name && (
+                            <div className="error-message">{errors.name}</div>
+                            )}
+                      </form>
                 </div>
              )}
            </Formik>
