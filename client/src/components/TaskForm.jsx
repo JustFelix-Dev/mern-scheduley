@@ -55,7 +55,8 @@ const TaskForm = ({ mode='edit',task }) => {
                     <h2>{mode === 'create' ? 'Create a Task' : 'Edit a Task'}</h2>
                       <form onClick={handleSubmit}>
                         <label htmlFor="taskName">Task Name:</label>
-                          <input type="text" id='taskName' name='taskName' 
+                          <input type="text" id='taskName' 
+                          name='taskName' 
                           value={values.name}
                           onChange={handleChange}
                           onBlur={handleBlur}

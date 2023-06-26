@@ -25,7 +25,7 @@ const Task = () => {
      if(!currentTask){
         return
      }
-     
+
     return (  
             <>
               <div className="task">
