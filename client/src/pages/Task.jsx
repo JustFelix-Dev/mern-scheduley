@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "../services/api";
 import { useParams } from "react-router-dom";
 import { setTask } from "../features/task/taskSlice";
+import TaskForm from "../components/TaskForm";
 
 const Task = () => {
 
@@ -21,10 +22,14 @@ const Task = () => {
         fetchTask()
     },[id,dispatch])
 
+     if(!currentTask){
+        return
+     }
+     
     return (  
             <>
               <div className="task">
-                    
+                    <TaskForm task={currentTask}/>
               </div>
              
             </>
