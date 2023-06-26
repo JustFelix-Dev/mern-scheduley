@@ -29,14 +29,33 @@ let initialValues = {
     time: dayjs()
 }
 const TaskForm = ({ mode='edit',task }) => {
-    
+
     const [ date,setDate ] = useState(null)
     const [ time,setTime ] = useState(null)
 
+    const handleFormSubmit=(values,onSubmitProps)=>{
+
+    }
+
   return (
-         <>
-            
-         </>
+           <Formik onSubmit={handleFormSubmit} 
+           initialValues={ mode == 'create' ? initialValues : task}
+           validationSchema={ mode == 'create' ? initialCreateSchema : initialEditSchema}>
+
+             {({
+                handleBlur,
+                handleSubmit,
+                handleChange,
+                resetForm,
+                values,
+                errors,
+                touched
+             })=>(
+                <div className="title">
+                    <h2>{mode === 'create' ? 'Create a Task' : 'Edit a Task'}</h2>
+                </div>
+             )}
+           </Formik>
   )
 }
 
