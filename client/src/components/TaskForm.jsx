@@ -21,7 +21,18 @@ const initialCreateSchema = Yup.Object().shape({
     time: Yup.string().required('This is required!')
 })
 
+
+let initialValues = {
+    name: '',
+    type: '',
+    date: dayjs().format('YYYY-MM-DD'),
+    time: dayjs()
+}
 const TaskForm = ({ mode='edit',task }) => {
+    
+    const [ date,setDate ] = useState(null)
+    const [ time,setTime ] = useState(null)
+
   return (
          <>
             
