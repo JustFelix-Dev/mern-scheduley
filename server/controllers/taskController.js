@@ -40,9 +40,9 @@ export const updateTask = async(req,res,next)=>{
  export const getTasks = async(req,res,next)=>{
     try{
         const type = req.query?.type
-        const day = req.type?.day
-        const { id } = req.user;
-        var maxDay , minDay;
+        const day = req.query?.day
+        const { id } = req.user
+        var maxDay , minDay
         if(day === 'today'){
             minDay = dayjs().format('YYYY-MM-DD')
             maxDay = dayjs().format('YYYY-MM-DD')

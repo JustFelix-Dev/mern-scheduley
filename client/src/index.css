@@ -13,5 +13,6 @@
 
   .task__container{
     display: flex;
+    flex-wrap: wrap;
     gap: 0.8rem;
   }
