@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import { BrowserRouter as Router , Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
-import Task from './components/Task'
+import Task from './pages/Task'
 
 function App() {
 

@@ -11,27 +11,33 @@ const Task = () => {
     const [ currentTask , setCurrentTask ] = useState(null)
     const dispatch = useDispatch()
 
-    useEffect(()=>{
-        async function fetchTask() {
-            await axios.get(`/task/${id}`)
-            .then((res)=>{
+useEffect(()=>{
+        async function fetchTask(){
+            await axios.get(`/task/${id}`).then((res)=>{
+                console.log(res.data.task)
                 setCurrentTask(res.data.task)
                 dispatch(setTask(res.data.task))
-            })
+            }).catch((err)=>{
+                console.log(err.message)
+            });
         }
-        fetchTask()
-    },[id,dispatch])
+        fetchTask();
+},[id, dispatch])
+
 
      if(!currentTask){
-        return
+        return 
      }
 
     return (  
             <>
               <div className="task">
-                    <TaskForm task={currentTask}/>
+                {
+                    currentTask && (
+                        <TaskForm task={currentTask}/>
+                    )
+                }
               </div>
-             
             </>
     );
 }
