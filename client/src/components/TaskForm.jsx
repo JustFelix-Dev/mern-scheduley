@@ -44,7 +44,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
     const handleFormSubmit=(values,onSubmitProps)=>{
         if(mode === 'edit'){
             axios.put(`/task/${task._id}`, values).then((res)=>{
-                navigate('/home');
+                navigate('/home')
             })
         }else{
             values.time = values.time.format('HH:mm')
@@ -74,7 +74,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
                       <form onClick={handleSubmit}>
                         <label htmlFor="taskName">Task Name:</label>
                           <input type="text" id='taskName' 
-                          name='taskName' 
+                          name='name' 
                           value={values.name}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -97,8 +97,11 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   renderInput={(params) => (
                     <TextField {...params} helperText="Select Date" />
                   )}
-                  error={Boolean(touched.date) && Boolean(errors.date)}
+                  error={ touched.date && errors.date ? errors.date : '' } 
                 />
+                {touched.date && errors.date && (
+                    <div className="error-message">{errors.date}</div>
+                )}
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
@@ -110,18 +113,22 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   }}
                   name="time"
                   onBlur={handleBlur}
-                  error={Boolean(touched.time) && Boolean(errors.time)}
+                  error={ touched.time && errors.time ? errors.time : '' } 
                   renderInput={(params) => (
                     <TextField {...params} helperText="Set Time" />
                   )}
                 />
+                {touched.time && errors.time && (
+                    <div className="error-message">{errors.time}</div>
+                )}
               </LocalizationProvider>
               <label htmlFor="type">Select Type :</label>
               <select name="type" id="type" 
                value={values.type}
                onChange={handleChange}
                onBlur={handleBlur}
-               error={Boolean(touched.type) && Boolean(errors.type)} >
+               error={ touched.type && errors.type ? errors.type : '' } 
+                >
                   {
                     types.map((type,idx)=>(
                          <option value={type} key={`${idx}-${type}`}>{type}</option>
@@ -143,7 +150,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
                        </> 
                     )
                 }
-                <button>
+                <button type='submit'>
                     {
                         mode === 'edit' ? 'Edit Task' : 'Create Task'
                     }
