@@ -8,7 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { TextField } from '@mui/material';
 import axios from '../services/api';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const initialEditSchema = Yup.object().shape({
@@ -38,22 +38,27 @@ const TaskForm = ({ mode = 'edit', task }) => {
 
     const [ date,setDate ] = useState(null)
     const [ time,setTime ] = useState(null)
+    const [status, setStatus] = useState(null);
+
     const navigate = useNavigate()
   const types = ['General','Work','Ideas','Meetings','Shopping','Payments']
 
     const handleFormSubmit=(values,onSubmitProps)=>{
+
         if(mode === 'edit'){
             axios.put(`/task/${task._id}`, values).then((res)=>{
-                navigate('/home')
+                   navigate('/home');
             })
         }else{
             values.time = values.time.format('HH:mm')
             axios.post('task/create', values).then((res)=>{
-                navigate('/home')
+                  navigate('/home');
             })
         }
 
     }
+
+
 
   return (
            <Formik onSubmit={handleFormSubmit} 
@@ -67,11 +72,11 @@ const TaskForm = ({ mode = 'edit', task }) => {
                 resetForm,
                 values,
                 errors,
-                touched
+                touched,
              })=>(
                 <div className="title">
                     <h2>{mode === 'create' ? 'Create a Task' : 'Edit a Task'}</h2>
-                      <form onClick={handleSubmit}>
+                      <form onSubmit={handleSubmit}>
                         <label htmlFor="taskName">Task Name:</label>
                           <input type="text" id='taskName' 
                           name='name' 
@@ -150,7 +155,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
                        </> 
                     )
                 }
-                <button type='submit'>
+                <button type='submit'  >
                     {
                         mode === 'edit' ? 'Edit Task' : 'Create Task'
                     }
