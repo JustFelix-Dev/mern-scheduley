@@ -38,8 +38,20 @@ const TaskForm = ({ mode = 'edit', task }) => {
 
     const [ date,setDate ] = useState(null)
     const [ time,setTime ] = useState(null)
+    const navigate = useNavigate()
+  const types = ['General','Work','Ideas','Meetings','Shopping','Payments']
 
     const handleFormSubmit=(values,onSubmitProps)=>{
+        if(mode === 'edit'){
+            axios.put(`/task/${task._id}`, values).then((res)=>{
+                navigate('/home');
+            })
+        }else{
+            values.time = values.time.format('HH:mm')
+            axios.post('task/create', values).then((res)=>{
+                navigate('/home')
+            })
+        }
 
     }
 
@@ -104,8 +116,39 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   )}
                 />
               </LocalizationProvider>
-                           
-                      </form>
+              <label htmlFor="type">Select Type :</label>
+              <select name="type" id="type" 
+               value={values.type}
+               onChange={handleChange}
+               onBlur={handleBlur}
+               error={Boolean(touched.type) && Boolean(errors.type)} >
+                  {
+                    types.map((type,idx)=>(
+                         <option value={type} key={`${idx}-${type}`}>{type}</option>
+                    ))
+                  }
+                </select>
+                {
+                    mode === 'edit' && (
+                       <>
+                       <label htmlFor='status'>Status</label>
+                        <select name="status" id="status"
+                         value={values.status}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
+                         >
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                       </> 
+                    )
+                }
+                <button>
+                    {
+                        mode === 'edit' ? 'Edit Task' : 'Create Task'
+                    }
+                </button>
+                       </form>
                 </div>
              )}
            </Formik>

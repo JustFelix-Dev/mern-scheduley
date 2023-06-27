@@ -14,7 +14,6 @@ const Task = () => {
 useEffect(()=>{
         async function fetchTask(){
             await axios.get(`/task/${id}`).then((res)=>{
-                console.log(res.data.task)
                 setCurrentTask(res.data.task)
                 dispatch(setTask(res.data.task))
             }).catch((err)=>{
