@@ -11,6 +11,9 @@ import axios from '../services/api';
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
+
 const initialEditSchema = Yup.object().shape({
     name: Yup.string().required('This is required!'),
     date: Yup.string().required('This is required!'),
@@ -30,8 +33,8 @@ const initialCreateSchema = Yup.object().shape({
 let initialValues = {
     name: '',
     type: '',
-    date: dayjs().format('YYYY-MM-DD'),
-    time: dayjs()
+    date: '',
+    time: ''
 }
 
 const TaskForm = ({ mode = 'edit', task }) => {
@@ -50,7 +53,6 @@ const TaskForm = ({ mode = 'edit', task }) => {
                    navigate('/home');
             })
         }else{
-            values.time = values.time.format('HH:mm')
             axios.post('task/create', values).then((res)=>{
                   navigate('/home');
             })
@@ -71,6 +73,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
                 handleChange,
                 resetForm,
                 values,
+                setFieldValue,
                 errors,
                 touched,
              })=>(
@@ -94,8 +97,8 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   value={mode ==="edit" ? dayjs(values.date || null) : values.date}
                   minDate={mode === "edit" ? null : dayjs()}
                   onChange={(newValue) => {
-                    values.date = newValue.format("YYYY-MM-DD");
-                    setDate(values.date);
+                    setFieldValue('date', newValue.format('YYYY-MM-DD'));
+                    setDate(newValue.format('YYYY-MM-DD'));
                   }}
                   onBlur={handleBlur}
                   name="date"
@@ -111,10 +114,10 @@ const TaskForm = ({ mode = 'edit', task }) => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   label="Time"
-                  value={mode ==="edit" ? dayjs(`${values.date.split("T")[0]}T${values.time}` || null) : values.time}
+                  value={mode ==="edit" ? dayjs(`${values.date.split("T")[0]}T${values.time}` || null) : values.time }
                   onChange={(newValue) => {
-                    values.time = newValue;
-                    setTime(values.time);
+                    setFieldValue("time", newValue.format('HH:mm'));
+                     setTime(newValue.format('HH:mm'));
                   }}
                   name="time"
                   onBlur={handleBlur}

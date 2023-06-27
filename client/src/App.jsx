@@ -1,22 +1,24 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import { BrowserRouter as Router , Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router , Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Task from './pages/Task'
 import TaskCreate from './pages/TaskCreate'
+import { useSelector } from 'react-redux'
 
 function App() {
 
+  const { user } = useSelector((state,action)=> state.user ) 
   return (
     <>
     <Router>
     <Routes>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/home' element={<Home/>}/>
-      <Route path='/task/:id' element={<Task/>}/>
-      <Route path='/task/create' element={<TaskCreate/>}/>
+      <Route path='/' element={!user ? <Login/> : <Navigate to={'/home'}/>}/>
+      <Route path='/home' element={user ? <Home/> : <Navigate to={'/'}/>}/>
+      <Route path='/task/:id' element={user ? <Task/> : <Navigate to={'/'}/>}/>
+      <Route path='/task/create' element={user ? <TaskCreate/> : <Navigate to={'/'}/>}/>
     </Routes>
     </Router>
     </>
