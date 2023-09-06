@@ -33,7 +33,7 @@ const profileShow = ()=>{
                         <img src="/cancelmenu.png" alt="close" height={17} width={17} />
                   </div>
                 <img src={'/user.png'} alt={'userIcon'} width={30} height={30} style={{borderRadius:"50%",objectFit:"cover"}} />
-                <h4>{user.name} </h4> <span>|</span> <h5> {user.email}</h5>
+                <h4>{user.username ?? user.name} </h4> <span>|</span> <h5> {user.email}</h5>
                 <button className="homebutton" onClick={()=>{ dispatch(setLogout()); navigate('/')}}>Logout</button>
             </motion.div>
           </div>
