@@ -1,20 +1,22 @@
   import bcrypt from 'bcrypt';
   import jwt from 'jsonwebtoken';
   import taskuser from '../models/User.js';
+import cloudinary from '../uploadImages.js';
 
 export const signUp = async( req,res,next )=>{
   try{
-
-     const { name,email,password,picturePath } = req.body;
+     const { name,email,password,username} = req.body;
      const salt = await bcrypt.genSalt()
      const hashed = await bcrypt.hash(password, salt)
-     const user = await taskuser.create({name,email,password:hashed,picturePath})
-     return res.status(201).json({savedUser : user})
-  }
+      const user = await taskuser.create({name,username,email,password:hashed})
+      console.log("User",user)
+      return res.status(201).json({message:'Registration successful!',savedUser : user})
+    }
   catch(err){
     next(err)
   }
 }
+
 
 export const logIn = async( req,res,next )=>{
     try{
@@ -29,7 +31,7 @@ export const logIn = async( req,res,next )=>{
         const token = jwt.sign({id:isUser._id}, process.env.SECRET)
         if(isUser){
           const { password,...userRes} = isUser._doc;
-          return res.status(201).cookie('token',{token},{httpOnly: true}).json({user: userRes })
+          return res.status(201).cookie('token',{token},{httpOnly: true}).json({user: userRes,message:'Authentication successful!' })
         }
 
     }

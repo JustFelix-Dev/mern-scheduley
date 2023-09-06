@@ -10,7 +10,8 @@ import { TextField } from '@mui/material';
 import axios from '../services/api';
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Navbar from './Navbar';
+import { motion } from 'framer-motion';
 
 
 
@@ -44,7 +45,7 @@ const TaskForm = ({ mode = 'edit', task }) => {
     const [status, setStatus] = useState(null);
 
     const navigate = useNavigate()
-  const types = ['General','Work','Ideas','Meetings','Shopping','Payments']
+  const types = ['General','Chores','Miscellaneous','Work','Ideas','Meetings','Shopping','Payments']
 
     const handleFormSubmit=(values,onSubmitProps)=>{
 
@@ -57,12 +58,25 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   navigate('/home');
             })
         }
+    }
 
+    const handleDelete=(e)=>{
+       if(!confirm("Are you sure you want to delete this task ?")){
+              e.preventDefault();
+       }else{
+          axios.delete(`/task/delete/${task._id}`).then(res=>{
+               navigate('/home')
+          }).catch(err=>{
+            console.log(err)
+          })
+       }
     }
 
 
 
   return (
+       <>
+           <Navbar/>
            <Formik onSubmit={handleFormSubmit} 
            initialValues={ mode == 'create' ? initialValues : task}
            validationSchema={ mode == 'create' ? initialCreateSchema : initialEditSchema}>
@@ -76,18 +90,22 @@ const TaskForm = ({ mode = 'edit', task }) => {
                 setFieldValue,
                 errors,
                 touched,
-             })=>(
+             })=>(  
+             <>
+                <h3 className='taskText'>{task?.name}</h3>
                 <div className="title">
+                      <motion.form initial={{opacity:0,x:-50,y:50}} animate={{opacity:1,x:0,y:0}} transition={{duration:1}} onSubmit={handleSubmit}>
+                       <div className='anchor'></div>
                     <h2>{mode === 'create' ? 'Create a Task' : 'Edit a Task'}</h2>
-                      <form onSubmit={handleSubmit}>
-                        <label htmlFor="taskName">Task Name:</label>
+                        <label htmlFor="taskName">Task Name:</label> <br />
                           <input type="text" id='taskName' 
                           name='name' 
+                          className='input'
                           value={values.name}
                           onChange={handleChange}
                           onBlur={handleBlur}
                           error={ touched.name && errors.name ? errors.name : '' } 
-                           />
+                           /> <br />
                            {touched.name && errors.name && (
                             <div className="error-message">{errors.name}</div>
                             )}
@@ -102,15 +120,16 @@ const TaskForm = ({ mode = 'edit', task }) => {
                   }}
                   onBlur={handleBlur}
                   name="date"
+                  className='custom-datePicker'
                   renderInput={(params) => (
-                    <TextField {...params} helperText="Select Date" />
+                    <TextField {...params} helperText="Select Date" className='custom-date' />
                   )}
                   error={ touched.date && errors.date ? errors.date : '' } 
                 />
                 {touched.date && errors.date && (
                     <div className="error-message">{errors.date}</div>
                 )}
-              </LocalizationProvider>
+              </LocalizationProvider> <br />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   label="Time"
@@ -120,6 +139,8 @@ const TaskForm = ({ mode = 'edit', task }) => {
                      setTime(newValue.format('HH:mm'));
                   }}
                   name="time"
+                  className='custom-datePicker'
+
                   onBlur={handleBlur}
                   error={ touched.time && errors.time ? errors.time : '' } 
                   renderInput={(params) => (
@@ -129,8 +150,8 @@ const TaskForm = ({ mode = 'edit', task }) => {
                 {touched.time && errors.time && (
                     <div className="error-message">{errors.time}</div>
                 )}
-              </LocalizationProvider>
-              <label htmlFor="type">Select Type :</label>
+              </LocalizationProvider> <br />
+              <label htmlFor="type">Select Type :</label> <br />
               <select name="type" id="type" 
                value={values.type}
                onChange={handleChange}
@@ -142,11 +163,11 @@ const TaskForm = ({ mode = 'edit', task }) => {
                          <option value={type} key={`${idx}-${type}`}>{type}</option>
                     ))
                   }
-                </select>
+                </select> <br />
                 {
                     mode === 'edit' && (
                        <>
-                       <label htmlFor='status'>Status</label>
+                       <label htmlFor='status'>Status</label><br />
                         <select name="status" id="status"
                          value={values.status}
                          onChange={handleChange}
@@ -157,16 +178,24 @@ const TaskForm = ({ mode = 'edit', task }) => {
                         </select>
                        </> 
                     )
-                }
-                <button type='submit'  >
+                } <br />
+                <button type='submit' className='taskbutton' >
                     {
                         mode === 'edit' ? 'Edit Task' : 'Create Task'
                     }
-                </button>
-                       </form>
+                </button> <br />
+                {
+                  mode === 'edit' &&(
+                     <button onClick={(e)=>handleDelete(e)} type='submit' className='deletebutton'>Delete Task</button>
+                  )
+                }
+                       </motion.form>
                 </div>
+             </>
+                
              )}
            </Formik>
+       </>
   )
 }
 

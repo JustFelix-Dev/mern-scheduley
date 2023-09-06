@@ -14,10 +14,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
       },
-      picturePath: {
-        type: String,
-        required: true
-      }
 }, { timestamps: true})
 
 export default mongoose.model('taskuser', UserSchema);

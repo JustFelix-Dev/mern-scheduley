@@ -7,13 +7,13 @@ const TaskSchema = mongoose.Schema({
       },
       type: {
         type: String,
-        enums: ['General','Work','Ideas','Meetings','Shopping','Payments'],
+        enums: ['General','Chores','Miscellaneous','Work','Ideas','Meetings','Shopping','Payments'],
         default: 'General'
       },
       status: {
         type: String,
         enums: ['pending','completed'],
-        default: 'completed'
+        default: 'pending'
       },
        name: {
         type: String,

@@ -9,13 +9,15 @@ import path from "path";
 import taskRoutes from "./routes/taskRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { signUp } from "./controllers/userController.js";
+import cloudinary from "./uploadImages.js";
+
+
 
 
 dotenv.config()
 
 const app = express()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+
 const PORT = process.env.PORT
 
 
@@ -23,24 +25,31 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(cors({origin:'http://localhost:5173', credentials:true}))
 app.use(cookieParser())
-app.use('/assets', express.static(path.join(__dirname , 'public/assets')));
+// app.use('/assets', express.static(path.join(__dirname , 'public/assets')));
 
 // file configuration
 // multer configuration
-const storage = multer.diskStorage({
-    destination: function(req,file,cb) {
-        cb(null, 'public/assets')
-    },
-    filename: function(req,file,cb) {
-        const picturePath = new Date().toISOString().replace(/:/g , '-') + file.originalname
-        req.body.picturePath = picturePath
-        cb(null , picturePath)
-    }
-})
- const upload = multer({ storage })
+// const storage = multer.diskStorage({
+//     destination: function(req,file,cb) {
+//         cb(null, 'public/assets')
+//     },
+//     filename: function(req,file,cb) {
+//         const picturePath = new Date().toISOString().replace(/:/g , '-') + file.originalname
+//         req.body.picturePath = picturePath
+//         cb(null , picturePath)
+//     }
+// })
+//  const upload = multer({ storage })
+
+
+
+// Define a route for file uploads
+const photoMiddleWare = multer({
+    storage: multer.memoryStorage()
+  }).single('picture');
 
 //  Routes
-   app.use('/auth/signup', upload.single('picture'), signUp)
+   app.use('/auth/signup', photoMiddleWare, signUp)
   app.use('/auth', userRoutes )
   app.use('/task', taskRoutes )
 //  global errors
